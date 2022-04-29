@@ -40,13 +40,13 @@ public class Company {
         int battery = 0;
         int rechargeableBattery = 0;
         for (int i = 0; i < MAX_BATTERIES; i++) {
-            if (batteries[i] != null && batteries[i] instanceof Battery) {
-                battery++;
-            } else if (batteries[i] != null && batteries[i] instanceof RechargeableBattery) {
+            if (batteries[i] != null && batteries[i] instanceof RechargeableBattery) {
                 rechargeableBattery++;
+            } else if (batteries[i] != null && batteries[i] instanceof Battery) {
+                battery++;
             }
         }
-        return "The total batterys is " + battery + " and the total rechargeable batterys is " + rechargeableBattery
+        return "The total batteries is " + battery + " and the total rechargeable batteries is " + rechargeableBattery
                 + ".";
     }
 
@@ -62,14 +62,28 @@ public class Company {
 
     public String showBatteriesInfo() {
         String str = "";
+        for (int i = 0; i < MAX_BATTERIES; i++) {
+            if (batteries[i] != null && batteries[i] instanceof RechargeableBattery) {
+                str += "Rechargeable Battery \n"
+                        + "Name:" + batteries[i].name + "\n" +
+                        "Useful Life Cost:" + ((RechargeableBattery) batteries[i]).calculateUsefulLifeCost() + ".\n";
+            } else if (batteries[i] != null && batteries[i] instanceof Battery) {
+                str += "Non-rechargeable Battery \n"
+                        + "Name:" + batteries[i].name + "\n" +
+                        "Useful Life Cost: 0.\n";
+            }
+
+        }
         return str;
     }
 
     public double calculateUsefulPromLifeCost() {
         double usefulPromLifeCost = 0;
         for (int i = 0; i < MAX_BATTERIES; i++) {
-            usefulPromLifeCost += (((RechargeableBattery) batteries[i]).calculateUsefulLifeCost())
-                    / (totalRechargeableBatteries());
+            if (batteries[i] != null && batteries[i] instanceof RechargeableBattery) {
+                usefulPromLifeCost += (((RechargeableBattery) batteries[i]).calculateUsefulLifeCost())
+                        / (totalRechargeableBatteries());
+            }
         }
         return usefulPromLifeCost;
     }
